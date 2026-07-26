@@ -1,5 +1,6 @@
 <div align="center">
 <img src="./banner.png" width="140" height="140" style="border-radius:50%; object-fit:cover;" alt="NeuroFive Solutions"/>
+   
 # HireSpark
 
 An AI-powered resume feedback tool that gives job seekers specific, line-by-line
