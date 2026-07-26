@@ -1,0 +1,14 @@
+[
+  {"category": "leadership", "text": "Led a cross-functional team of 8 to deliver a customer portal redesign 3 weeks ahead of schedule."},
+  {"category": "leadership", "text": "Managed onboarding for 12 new hires, cutting ramp-up time from 6 weeks to 3."},
+  {"category": "impact_metrics", "text": "Increased monthly active users by 27% through targeted retention campaigns."},
+  {"category": "impact_metrics", "text": "Reduced customer churn by 15% by redesigning the support escalation workflow."},
+  {"category": "technical", "text": "Built a real-time data pipeline processing 2M+ events/day using Kafka and Spark."},
+  {"category": "technical", "text": "Migrated legacy monolith to microservices, cutting average API latency by 45%."},
+  {"category": "process_improvement", "text": "Automated manual reporting process, saving the team 10 hours per week."},
+  {"category": "process_improvement", "text": "Redesigned QA workflow, reducing production bugs by 30% over two quarters."},
+  {"category": "sales_growth", "text": "Closed $1.2M in new business across 40 enterprise accounts in first year."},
+  {"category": "sales_growth", "text": "Grew regional territory revenue by 35% year-over-year."},
+  {"category": "communication", "text": "Presented quarterly product roadmap to C-suite stakeholders across 5 business units."},
+  {"category": "communication", "text": "Authored technical documentation adopted as the team's onboarding standard."}
+]

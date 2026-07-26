@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HireSpark AI — Land More Interviews</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="bg-blobs">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+</div>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z" fill="#00E5FF"/></svg>
+      <span class="name">Hire<em>Spark</em> AI</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#how-it-works">How it works</a>
+      <a href="#analyze">Upload resume</a>
+    </nav>
+    <a href="#analyze" class="nav-cta">Analyze resume</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="hero">
+    <p class="eyebrow">AI Resume Analysis</p>
+    <h1 class="hero-title">Turn your resume into your <span class="accent">best advocate</span></h1>
+    <p class="hero-subtitle">
+      Upload your resume and get an instant ATS score, line-by-line rewrite suggestions,
+      and a keyword gap report matched against any job description — in seconds.
+    </p>
+    <div class="hero-actions">
+      <a href="#analyze" class="btn-primary">Start free analysis</a>
+      <a href="#how-it-works" class="btn-outline">See how it works</a>
+    </div>
+  </section>
+
+  <section id="how-it-works">
+    <p class="section-label">How it works</p>
+    <div class="steps">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-title">Upload</div>
+        <div class="step-desc">Drop in your PDF or DOCX resume, and optionally paste the job posting you're targeting.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-title">AI scans it</div>
+        <div class="step-desc">We check ATS compatibility, extract skills, and compare your wording against the role.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-title">Get your report</div>
+        <div class="step-desc">See your score, exact lines to rewrite, and the keywords you're missing.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="panel" id="analyze">
+    <div class="bl"></div><div class="br"></div>
+    <p class="panel-label">Input</p>
+    <form method="POST" enctype="multipart/form-data" id="resume-form" onsubmit="showLoading()">
+      <label>Upload resume</label>
+
+      <div class="upload-box">
+       <div class="upload-icon" role="img" aria-label="Upload document icon">📄</div>
+        <h3>Drag & drop your resume</h3>
+        <p>or click below to browse your files</p>
+        <input type="file" id="resume" name="resume" accept=".pdf,.docx" required>
+        <label for="resume" class="upload-btn">Browse files</label>
+        <small>Supported formats: PDF · DOCX</small>
+      </div>
+
+      <label>Target job title or job description (optional)</label>
+      <textarea name="job_description" rows="4" placeholder="Paste a job posting here for ATS gap analysis"></textarea>
+
+      <button type="submit" id="submit-btn">Run analysis</button>
+
+      <div class="loading-card" id="loading-msg">
+        <h3>AI resume analysis in progress</h3>
+        <div class="loading-step">◉ Reading resume...</div>
+        <div class="loading-step">◉ Extracting skills...</div>
+        <div class="loading-step">◉ Checking ATS score...</div>
+        <div class="loading-step">◉ Matching keywords...</div>
+        <div class="loading-step">◉ Creating recommendations...</div>
+        <div class="loading-step">◉ Finalizing report...</div>
+        <div class="scan-bar"></div>
+      </div>
+    </form>
+  </div>
+
+  {% if error %}
+    <p class="error">// ERROR: {{ error }}</p>
+  {% endif %}
+
+  {% if result %}
+  <div class="results-block">
+
+    <div class="panel fade-card">
+      <div class="bl"></div><div class="br"></div>
+      <p class="panel-label">Verdict</p>
+      <p class="verdict-text">{{ result.verdict }}</p>
+    </div>
+
+    <div class="dashboard-grid">
+  <div class="metric-card">
+    <div class="metric-title">Overall score</div>
+    <div class="metric-value">{{ result.overall_score }}</div>
+    <div class="metric-sub">Out of 100</div>
+  </div>
+</div>
+
+    <div class="panel fade-card">
+      <div class="bl"></div><div class="br"></div>
+      <p class="panel-label">Stat scan</p>
+      {% for key, val in result.scores.items() %}
+      <div class="score-row">
+        <div class="score-top">
+          <span class="score-label">{{ key|capitalize }}</span>
+          <span class="score-num">{{ val }}/10</span>
+        </div>
+        <div class="score-track">
+          <div class="score-fill" data-width="{{ val * 10 }}"></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="panel fade-card">
+      <div class="bl"></div><div class="br"></div>
+      <p class="panel-label">Strengths</p>
+      <ul class="plain">
+        {% for s in result.strengths %}
+        <li class="strength-item">{{ s }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="panel fade-card">
+      <div class="bl"></div><div class="br"></div>
+      <p class="panel-label">Line notes</p>
+      {% for issue in result.issues %}
+      <div class="issue">
+        <div class="quote">"{{ issue.quote }}"</div>
+        <div class="problem">{{ issue.problem }}</div>
+        <div class="rewrite">{{ issue.rewrite }}</div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if result.ats_gaps %}
+    <div class="panel fade-card">
+      <div class="bl"></div><div class="br"></div>
+      <p class="panel-label">Missing from job posting</p>
+      {% for gap in result.ats_gaps %}
+      <span class="tag">{{ gap }}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="POST" action="/export">
+      <input type="hidden" name="result_data" value='{{ result | tojson | e }}'>
+      <button type="submit" class="btn-secondary">Download report</button>
+    </form>
+
+  </div>
+  {% endif %}
+
+</div>
+<button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark or light theme" title="Toggle theme">🌙</button>
+<script>
+function showLoading(){
+  const btn = document.getElementById("submit-btn");
+  btn.disabled = true;
+  btn.innerHTML = "Analyzing...";
+  document.getElementById("loading-msg").classList.add("active");
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".score-fill").forEach((el, i) => {
+    const target = el.getAttribute("data-width");
+    setTimeout(() => { el.style.width = target + "%"; }, 200 + i * 120);
+  });
+});
+
+const themeBtn = document.getElementById("theme-toggle");
+const root = document.documentElement;
+const saved = localStorage.getItem("theme") || "dark";
+root.setAttribute("data-theme", saved);
+themeBtn.textContent = saved === "light" ? "☀️" : "🌙";
+themeBtn.setAttribute("aria-label", saved === "light" ? "Switch to dark theme" : "Switch to light theme");
+
+themeBtn.addEventListener("click", () => {
+  const next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
+  root.setAttribute("data-theme", next);
+  themeBtn.textContent = next === "light" ? "☀️" : "🌙";
+  themeBtn.setAttribute("aria-label", next === "light" ? "Switch to dark theme" : "Switch to light theme");
+  localStorage.setItem("theme", next);
+});
+</script>
+</body>
+</html>
