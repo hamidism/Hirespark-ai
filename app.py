@@ -92,6 +92,15 @@ SCORES
         mimetype="text/plain",
         headers={"Content-Disposition": "attachment;filename=hirespark_report.txt"}
     )
-
+@app.route("/debug-files")
+def debug_files():
+    base = os.path.dirname(os.path.abspath(__file__))
+    listing = {}
+    for root, dirs, files in os.walk(base):
+        if "_vendor" in root or ".git" in root:
+            continue
+        rel = os.path.relpath(root, base)
+        listing[rel] = files
+    return {"base_dir": base, "contents": listing}
 if __name__ == "__main__":
     app.run(debug=True)
