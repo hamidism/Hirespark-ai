@@ -11,6 +11,7 @@ app = Flask(
     template_folder=os.path.join(BASE_DIR, "templates"),
     static_folder=os.path.join(BASE_DIR, "static"),
 )
+
 UPLOAD_FOLDER = "/tmp/uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
@@ -50,9 +51,11 @@ def dashboard():
                 print(f"[ERROR] {e}")
 
     return render_template("index.html", result=result, error=error)
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"), 404
+
 @app.route("/export", methods=["POST"])
 def export():
     result_json = request.form.get("result_data")
@@ -92,6 +95,7 @@ SCORES
         mimetype="text/plain",
         headers={"Content-Disposition": "attachment;filename=hirespark_report.txt"}
     )
+
 @app.route("/debug-files")
 def debug_files():
     base = os.path.dirname(os.path.abspath(__file__))
@@ -102,5 +106,6 @@ def debug_files():
         rel = os.path.relpath(root, base)
         listing[rel] = files
     return {"base_dir": base, "contents": listing}
+
 if __name__ == "__main__":
     app.run(debug=True)
